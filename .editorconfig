@@ -1,0 +1,30 @@
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+quote_type = single
+
+[Makefile]
+indent_style = tab
+indent_size = 8
+
+[*.{sh,ps1,sql}]
+insert_final_newline = false
+
+[.env*]
+insert_final_newline = false
+
+[*.ps1]
+end_of_line = crlf
+
+[*.{md,html}]
+max_line_length = off
+trim_trailing_whitespace = false
+
+[*Dockerfile]
+insert_final_newline = false

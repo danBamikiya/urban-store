@@ -1,0 +1,12 @@
+node_modules/
+.github/
+.gitignore
+.gitattributes
+.editorconfig
+.shellcheckrc
+.prettier*
+.eslint*
+*.md
+run.*
+Makefile
+health-check.sh

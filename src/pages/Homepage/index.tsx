@@ -5,7 +5,6 @@ const Homepage = (props: any) => {
   return (
     <section className="homepage">
       <Directory />
-      <h1>Homepage</h1>
     </section>
   )
 }

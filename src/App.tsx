@@ -13,6 +13,7 @@ import MainLayout from './layouts/MainLayout'
 import Homepage from './pages/Homepage'
 import Registration from './pages/Registration'
 import Login from './pages/Login'
+import Recovery from './pages/Recovery'
 
 interface Props {}
 interface State extends UserState {}
@@ -90,6 +91,14 @@ class App extends Component<Props, State> {
                   <Login />
                 </MainLayout>
               )
+            }
+          />
+          <Route
+            path="/recovery"
+            element={
+              <MainLayout currentUser={this.state.currentUser}>
+                <Recovery />
+              </MainLayout>
             }
           />
         </Routes>

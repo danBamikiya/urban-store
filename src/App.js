@@ -1,9 +1,9 @@
 import { Component } from 'react'
+import { connect } from 'react-redux'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import './default.scss'
 import { auth, handleUserProfile } from './firebase/utils'
-import { UserState } from './types/user'
-import { Unsubscribe } from 'firebase'
+import { setCurrentUser } from './redux/User/user.actions'
 
 // layouts
 import HomepageLayout from './layouts/HomepageLayout'
@@ -15,56 +15,40 @@ import Registration from './pages/Registration'
 import Login from './pages/Login'
 import Recovery from './pages/Recovery'
 
-interface Props {}
-interface State extends UserState {}
-
-const intialState = {
-  currentUser: null
-}
-
-class App extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      ...intialState
-    }
-  }
-
-  authListener: Unsubscribe | null = null
+class App extends Component {
+  authListener = null
 
   componentDidMount() {
+    const { setCurrentUser } = this.props
+
     this.authListener = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await handleUserProfile(userAuth)
-        userRef?.onSnapshot(snapshot => {
-          this.setState({
-            currentUser: {
-              id: snapshot.id,
-              ...snapshot.data()
-            }
+        userRef.onSnapshot(snapshot => {
+          setCurrentUser({
+            id: snapshot.id,
+            ...snapshot.data()
           })
         })
       }
 
-      this.setState({
-        ...intialState
-      })
+      setCurrentUser(userAuth)
     })
   }
 
   componentWillUnmount() {
-    this.authListener!()
+    this.authListener()
   }
 
   render() {
-    const { currentUser } = this.state
+    const { currentUser } = this.props
     return (
       <div className="App">
         <Routes>
           <Route
             path="/"
             element={
-              <HomepageLayout currentUser={currentUser}>
+              <HomepageLayout>
                 <Homepage />
               </HomepageLayout>
             }
@@ -75,7 +59,7 @@ class App extends Component<Props, State> {
               currentUser ? (
                 <Navigate to="/" />
               ) : (
-                <MainLayout currentUser={currentUser}>
+                <MainLayout>
                   <Registration />
                 </MainLayout>
               )
@@ -87,7 +71,7 @@ class App extends Component<Props, State> {
               currentUser ? (
                 <Navigate to="/" />
               ) : (
-                <MainLayout currentUser={this.state.currentUser}>
+                <MainLayout>
                   <Login />
                 </MainLayout>
               )
@@ -96,7 +80,7 @@ class App extends Component<Props, State> {
           <Route
             path="/recovery"
             element={
-              <MainLayout currentUser={this.state.currentUser}>
+              <MainLayout>
                 <Recovery />
               </MainLayout>
             }
@@ -107,4 +91,12 @@ class App extends Component<Props, State> {
   }
 }
 
-export default App
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+})
+
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { UserState } from '../../types/user'
 import { auth } from '../../firebase/utils'
@@ -46,4 +47,8 @@ const Header: FC<props> = ({ currentUser }) => {
   )
 }
 
-export default Header
+const mapStateToProps = ({ user }: { user: UserState }) => ({
+  currentUser: user.currentUser
+})
+
+export default connect(mapStateToProps, null)(Header)

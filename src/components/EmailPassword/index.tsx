@@ -39,7 +39,7 @@ class EmailPassword extends Component<Props, typeof initialState> {
       const { email } = this.state
 
       const config = {
-        url: 'http://localhost:3000/login'
+        url: 'http://localhost:4050/login'
       }
 
       await auth

@@ -12,8 +12,6 @@ export const firestore = firebase.firestore()
 export const GoogleProvider = new firebase.auth.GoogleAuthProvider()
 GoogleProvider.setCustomParameters({ prompt: 'select_account' })
 
-export const signInWithGoogle = () => auth.signInWithPopup(GoogleProvider)
-
 export const handleUserProfile = async (
   userAuth: user,
   additionalData?: any
@@ -41,4 +39,13 @@ export const handleUserProfile = async (
   }
 
   return userRef
+}
+
+export const getCurrentUser = () => {
+  return new Promise((res, rej) => {
+    const unsubscribe = auth.onAuthStateChanged((userAuth: user) => {
+      unsubscribe()
+      res(userAuth)
+    }, rej)
+  })
 }

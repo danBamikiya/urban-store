@@ -1,15 +1,12 @@
 import { FC } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { UserState } from '../types/user'
 
-type props = UserState
-
-const HomepageLayout: FC<props> = ({ children, ...props }) => {
+const HomepageLayout: FC = props => {
   return (
     <div className="fullHeight">
       <Header {...props} />
-      <div className="main">{children}</div>
+      {props.children}
       <Footer />
     </div>
   )

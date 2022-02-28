@@ -1,95 +1,85 @@
-import { ChangeEvent, Component, FormEvent } from 'react'
+import { useState, FormEvent, useEffect } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import './styles.scss'
 
 import AuthWrapper from '../AuthWrapper'
 import FormInput from '../forms/FormInput'
 import Button from '../forms/Button'
-import { auth } from '../../firebase/utils'
-import { navigate } from '../../utils/navigate'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  resetPasswordStart,
+  resetUserState
+} from '../../redux/User/user.actions'
 
-interface Props {}
-
-const initialState = {
-  email: '',
-  errors: [] as string[]
+type State = {
+  resetPasswordSuccess: boolean
+  userErr: string[]
 }
 
-class EmailPassword extends Component<Props, typeof initialState> {
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      ...initialState
+const mapState = ({ user }: { user: State }) => ({
+  resetPasswordSuccess: user.resetPasswordSuccess,
+  userErr: user.userErr
+})
+
+const EmailPassword = () => {
+  const { resetPasswordSuccess, userErr } = useSelector(mapState)
+  const [email, setEmail] = useState('')
+  const [errors, setErrors] = useState([] as string[])
+  const history = useHistory()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (resetPasswordSuccess) {
+      dispatch(resetUserState())
+      history.push('/login')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetPasswordSuccess])
+  useEffect(() => {
+    if (Array.isArray(userErr) && userErr.length > 0) {
+      setErrors(userErr)
+    }
+  }, [userErr])
 
-    this.handleChange = this.handleChange.bind(this)
-  }
-
-  handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-
-    this.setState({
-      [name]: value
-    } as unknown as typeof initialState)
-  }
-
-  handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
-
-    try {
-      const { email } = this.state
-
-      const config = {
-        url: 'http://localhost:4050/login'
-      }
-
-      await auth
-        .sendPasswordResetEmail(email, config)
-        .then(() => {
-          navigate('/login')
-          console.log('Password Reset')
-        })
-        .catch(() => {
-          const err = ['Email not found. Please try again']
-          this.setState({
-            errors: err
-          })
-        })
-    } catch (err) {
-      //
-    }
+    dispatch(resetPasswordStart({ email }))
   }
 
-  render() {
-    const { email, errors } = this.state
-    const configAuthWrapper = {
-      headline: 'Email Password'
-    }
+  const configAuthWrapper = {
+    headline: 'Email Password'
+  }
 
-    return (
-      <AuthWrapper {...configAuthWrapper}>
-        <div className="form-wrap">
-          {errors.length > 0 && (
-            <ul>
-              {errors.map((err, index) => (
-                <li key={index}>{err}</li>
-              ))}
-            </ul>
-          )}
+  return (
+    <AuthWrapper {...configAuthWrapper}>
+      <div className="form-wrap">
+        {errors.length > 0 && (
+          <ul>
+            {errors.map((err, index) => (
+              <li key={index}>{err}</li>
+            ))}
+          </ul>
+        )}
 
-          <form onSubmit={this.handleSubmit}>
-            <FormInput
-              type="email"
-              name="email"
-              value={email}
-              placeholder="Email"
-              handleChange={this.handleChange}
-            />
-            <Button type="submit">Submit</Button>
-          </form>
+        <form onSubmit={handleSubmit}>
+          <FormInput
+            type="email"
+            name="email"
+            value={email}
+            placeholder="Email"
+            handleChange={e => setEmail(e.target.value)}
+          />
+          <Button type="submit">Email Password</Button>
+        </form>
+
+        <div className="links">
+          <Link to="/login">LogIn</Link>
+          {` | `}
+          <Link to="/registration">Register</Link>
         </div>
-      </AuthWrapper>
-    )
-  }
+      </div>
+    </AuthWrapper>
+  )
 }
 
 export default EmailPassword

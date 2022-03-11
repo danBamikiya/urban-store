@@ -22,4 +22,4 @@ The app isn't deployed because I'm using a dev-only Stripe API key, I don't live
 ## Requirements to run the app
 
 - A Firebase Database configuration (requires creating a Blaze Google Cloud account)
-- A Stripe Developer's Privat Key and Publishable Dev Key (requires creating an account with them)
+- A Stripe Developer's Private Key and Publishable Dev Key (requires creating an account with them)

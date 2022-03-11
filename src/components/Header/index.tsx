@@ -56,13 +56,6 @@ const Header: FC = props => {
 
         <div className="callToActions">
           <ul>
-            <li>
-              <Link to="/cart">
-                Your Cart ({totalNumCartItems})
-                <i className="fas fa-shopping-basket"></i>
-              </Link>
-            </li>
-
             {currentUser && [
               <li key={1}>
                 <Link to="/dashboard">
@@ -89,6 +82,13 @@ const Header: FC = props => {
                 </Link>
               </li>
             ]}
+
+            <li>
+              <Link to="/cart">
+                Cart ({totalNumCartItems})
+                <i className="fas fa-shopping-basket"></i>
+              </Link>
+            </li>
 
             <li className="mobileMenu">
               <span onClick={() => setActiveMenu(!activeMenu)}>

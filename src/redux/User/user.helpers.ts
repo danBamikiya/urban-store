@@ -3,7 +3,7 @@ import { auth } from '../../firebase/utils'
 
 export const handleResetPasswordAPI = (email: string) => {
   const config = {
-    url: 'http://localhost:3000/login'
+    url: 'http://localhost:4050/login'
   }
 
   return new Promise((res, rej) => {

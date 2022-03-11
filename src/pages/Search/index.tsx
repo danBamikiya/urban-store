@@ -1,6 +1,7 @@
 import ProductResults from './../../components/ProductResults'
 
-const Search = () => {
+// eslint-disable-next-line no-empty-pattern
+const Search = ({}) => {
   return (
     <div className="searchPage">
       <ProductResults />

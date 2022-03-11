@@ -1,7 +1,11 @@
-const functions = require('firebase-functions')
+/* eslint-disable */
+import * as functions from 'firebase-functions'
+import { Request, Response } from 'express'
+
 const express = require('express')
 const cors = require('cors')
-const stripe = require('stripe')('')
+require('dotenv').config()
+const stripe = require('stripe')(process.env.STRIPE_KEY)
 
 const app = express()
 
@@ -12,7 +16,7 @@ app.use(
 )
 app.use(express.json())
 
-app.post('/payments/create', async (req, res) => {
+app.post('/payments/create', async (req: Request, res: Response) => {
   try {
     const { amount, shipping } = req.body
     const paymentIntent = await stripe.paymentIntents.create({
@@ -25,12 +29,15 @@ app.post('/payments/create', async (req, res) => {
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
+      // @ts-ignore
       message: err.message
     })
+    // @ts-ignore
+    console.log(err.message)
   }
 })
 
-app.get('*', (req, res) => {
+app.get('*', (req: Request, res: Response) => {
   res.status(404).send('404, Not Found.')
 })
 

@@ -60,7 +60,7 @@ function List-Services {
 function Build-Services {
     Teardown -RMI
     Write-Host "Creating and starting production services...`n" -f blue
-    docker-compose -f docker-compose.yml docker-compose.prod.yml up --build -d
+    docker-compose -f docker-compose.yml up --build -d
     docker-compose logs -f
 }
 

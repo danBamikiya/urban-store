@@ -1,4 +1,5 @@
 node_modules/
+functions/
 .github/
 .gitignore
 .gitattributes

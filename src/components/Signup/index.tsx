@@ -56,8 +56,6 @@ const Signup = () => {
         confirmPassword
       })
     )
-    resetForm()
-    history.push('/')
   }
 
   const configAuthWrapper = {

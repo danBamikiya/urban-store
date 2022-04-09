@@ -17,7 +17,7 @@ The development of this app done in a Docker container and the Docker Compose co
 
 ## Deployment
 
-The app isn't deployed because I'm using a dev-only Stripe API key, I don't live in the US so I can't get a production Stripe Key. _When I'm chanced I'll find ways on how to work around this, maybe I can deploy the app with dev-only key since I won't be processing real payments_
+The API handling payments request is deployed as a Firebase Function and the React UI is deployed on Firebase hosting: https://urban-stores.web.app/
 
 ## Requirements to run the app
 
